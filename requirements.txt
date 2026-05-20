@@ -1,0 +1,6 @@
+numpy>=2.1.0
+streamlit>=1.40.0
+langchain>=0.3.14
+langchain-community>=0.3.14
+validators
+pydantic>=2.9.0
