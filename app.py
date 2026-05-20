@@ -98,6 +98,14 @@ def render_html(html_str: str):
     """
     st.html(html_str)
 
+def render_js(js_str: str):
+    """
+    Renders custom Javascript using Streamlit components v1 html, which creates
+    an iframe and ensures the script executes successfully in the browser.
+    """
+    import streamlit.components.v1 as components
+    components.html(js_str, height=0)
+
 # =====================================================================
 # 3. CUSTOM CSS & TYPOGRAPHY INJECTION (LIGHT THEME OVERHAUL)
 # =====================================================================
@@ -107,11 +115,13 @@ custom_css = """
 /* Main Page Light Theme Override */
 .stApp {
     background-color: #FFFFFF !important;
+    font-family: 'Outfit', sans-serif !important;
 }
 
 [data-testid="stSidebar"] {
     background-color: #F4F5F7 !important;
     border-right: 1px solid rgba(0, 0, 0, 0.05);
+    font-family: 'Outfit', sans-serif !important;
 }
 
 /* Typography Overrides */
@@ -121,16 +131,24 @@ h1, h2, h3, .brand-title {
     color: #B48A00 !important;
 }
 
-p, span, div, li, button, input, textarea, a {
+p, li, input, textarea, a {
+    font-family: 'Outfit', sans-serif !important;
+}
+
+.card-btn, .stFormSubmitButton>button {
     font-family: 'Outfit', sans-serif !important;
 }
 
 /* Hide Default Streamlit Elements */
 #MainMenu {visibility: hidden;}
 footer {visibility: hidden;}
-header {visibility: hidden;}
 [data-testid="stHeader"] {background: rgba(0,0,0,0) !important;}
 .stDeployButton {display:none !important;}
+
+/* Style Streamlit Native Sidebar Collapse/Expand Buttons */
+button[data-testid="stSidebarCollapseButton"], [data-testid="stHeader"] button {
+    color: #B48A00 !important;
+}
 
 /* Adjust Container Padding */
 [data-testid="stAppViewBlockContainer"] {
@@ -286,6 +304,80 @@ header {visibility: hidden;}
 }
 """
 render_html(f"<style>{custom_css}</style>")
+
+# Sidebar auto-hide/auto-expand script for desktop hover and mobile click-outside dismiss
+auto_hide_js = """
+<script>
+(function() {
+    const parentWin = (window.parent && window.parent !== window) ? window.parent : window;
+    const doc = parentWin.document;
+    let collapseTimeout = null;
+    
+    function setupSidebarAutoHide() {
+        const sidebar = doc.querySelector('[data-testid="stSidebar"]');
+        if (!sidebar) return;
+        
+        if (sidebar.dataset.autoHideSetup === "true") return;
+        sidebar.dataset.autoHideSetup = "true";
+        
+        const isMobile = parentWin.matchMedia("(max-width: 768px)").matches;
+        
+        if (!isMobile) {
+            // Desktop hover-out collapse (with 300ms debounce to prevent accidental collapses)
+            sidebar.addEventListener('mouseleave', () => {
+                collapseTimeout = setTimeout(() => {
+                    const collapseBtn = sidebar.querySelector('button[data-testid="stSidebarCollapseButton"]');
+                    if (collapseBtn) {
+                        collapseBtn.click();
+                    }
+                }, 300);
+            });
+            
+            // Clear collapse timeout on mouse re-enter
+            sidebar.addEventListener('mouseenter', () => {
+                if (collapseTimeout) {
+                    clearTimeout(collapseTimeout);
+                    collapseTimeout = null;
+                }
+            });
+            
+            // Desktop hover-in expand (when mouse is within 30px of the left edge)
+            doc.addEventListener('mousemove', (e) => {
+                if (e.clientX < 30) {
+                    const collapseBtn = sidebar.querySelector('button[data-testid="stSidebarCollapseButton"]');
+                    if (!collapseBtn) {
+                        const expandBtn = doc.querySelector('[data-testid="stHeader"] button');
+                        if (expandBtn) {
+                            expandBtn.click();
+                        }
+                    }
+                }
+            });
+        } else {
+            // Mobile: tap/touchstart outside the sidebar area collapses it
+            const closeHandler = (e) => {
+                if (sidebar && !sidebar.contains(e.target)) {
+                    // Check if the click was not on the expand/collapse triggers themselves
+                    const header = doc.querySelector('[data-testid="stHeader"]');
+                    if (header && header.contains(e.target)) return;
+                    
+                    const collapseBtn = sidebar.querySelector('button[data-testid="stSidebarCollapseButton"]');
+                    if (collapseBtn) {
+                        collapseBtn.click();
+                    }
+                }
+            };
+            doc.addEventListener('click', closeHandler);
+            doc.addEventListener('touchstart', closeHandler);
+        }
+    }
+    
+    // Check and setup periodically to handle Streamlit re-renders
+    setInterval(setupSidebarAutoHide, 1000);
+})();
+</script>
+"""
+render_js(auto_hide_js)
 
 # =====================================================================
 # 4. STATEFUL SPA ROUTING & DEEP LINKING
