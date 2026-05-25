@@ -302,6 +302,29 @@ button[data-testid="stSidebarCollapseButton"], [data-testid="stHeader"] button {
     color: #FFFFFF !important;
     box-shadow: 0 0 12px rgba(180, 138, 0, 0.2) !important;
 }
+
+/* Custom Footer Styling */
+.site-footer {
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+    padding-top: 20px;
+    margin-top: 60px;
+    font-size: 13.5px;
+    color: #62626A;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+.footer-link {
+    color: #B48A00;
+    text-decoration: none;
+    transition: color 0.2s ease;
+    font-weight: 500;
+}
+.footer-link:hover {
+    color: #1A1A1A;
+    text-decoration: underline;
+}
 """
 render_html(f"<style>{custom_css}</style>")
 
@@ -619,3 +642,85 @@ elif current_page == "about":
                     
                     st.success(f"Transmission successful. Thank you, {safe_name}. We will connect at {safe_email} shortly.")
                     # In a production scenario, these parameters would be passed to a stateless backend endpoint
+
+# ---------------------------------------------------------------------
+# PAGE D: PRIVACY POLICY (DEEP LINK)
+# ---------------------------------------------------------------------
+elif current_page == "privacy":
+    render_html("""
+        <div style="margin-top: 10px; margin-bottom: 30px;">
+            <p style="color: #B48A00; font-size: 14px; text-transform: uppercase; letter-spacing: 5px; font-weight: 600; margin-bottom: 8px;">Legal & Security</p>
+            <h1 style="font-size: 46px; margin: 0; line-height: 1.25;">Privacy Policy</h1>
+        </div>
+    """)
+    
+    render_html("""
+        <div class="glass-card">
+            <h3 class="accent-title">Privacy Statement about the Website</h3>
+            <p style="font-size: 16px; line-height: 1.7; color: #2D3748;">
+                Welcome to <strong>Axomia.in</strong>. We value your privacy and are committed to safeguarding your personal data. Below, we outline our strict policies regarding data collection, processing, and storage.
+            </p>
+            
+            <h4 style="color: #B48A00; margin-top: 25px; margin-bottom: 10px;">1. Zero Cloud Trace & Local Storage</h4>
+            <p style="font-size: 15px; line-height: 1.7; color: #62626A;">
+                All primary products announced on this ecosystem, including our flagship application <strong>CardVault</strong>, operate on an offline-first architecture. Any digital visiting cards, OCR data, or scanned details are stored exclusively in local, on-device SQLite databases. We do not operate external database servers for your contact cards.
+            </p>
+            
+            <h4 style="color: #B48A00; margin-top: 25px; margin-bottom: 10px;">2. Website Data Collection</h4>
+            <p style="font-size: 15px; line-height: 1.7; color: #62626A;">
+                This website is structured to be stateless and does not collect tracking or behavioral analytics cookies. 
+                The only data we receive is the information you explicitly provide when using the <strong>Contact Us</strong> form (Name, Email, and Message). This information is parsed strictly to address your inquiry and is never shared, rented, or sold to third-party marketing services.
+            </p>
+            
+            <h4 style="color: #B48A00; margin-top: 25px; margin-bottom: 10px;">3. OCR Data Security</h4>
+            <p style="font-size: 15px; line-height: 1.7; color: #62626A;">
+                AI OCR queries initiated within our tools utilize temporary, stateless API gateways. Visual input parsed by the OCR engine is processed immediately to return structured JSON parameters and is not retained or logged for future training purposes, ensuring your enterprise communications remain secure.
+            </p>
+        </div>
+    """)
+
+# ---------------------------------------------------------------------
+# PAGE E: TERMS & CONDITIONS (DEEP LINK)
+# ---------------------------------------------------------------------
+elif current_page == "terms":
+    render_html("""
+        <div style="margin-top: 10px; margin-bottom: 30px;">
+            <p style="color: #B48A00; font-size: 14px; text-transform: uppercase; letter-spacing: 5px; font-weight: 600; margin-bottom: 8px;">Legal & Security</p>
+            <h1 style="font-size: 46px; margin: 0; line-height: 1.25;">Terms of Use</h1>
+        </div>
+    """)
+    
+    render_html("""
+        <div class="glass-card">
+            <h3 class="accent-title">Terms and Conditions</h3>
+            <p style="font-size: 16px; line-height: 1.7; color: #2D3748;">
+                By accessing or using the website and software tools hosted on <strong>Axomia.in</strong>, you agree to comply with and be bound by the following terms of use.
+            </p>
+            
+            <h4 style="color: #B48A00; margin-top: 25px; margin-bottom: 10px;">1. Permitted Use & Software Access</h4>
+            <p style="font-size: 15px; line-height: 1.7; color: #62626A;">
+                You are granted access to download, test, and utilize our published software utilities, specifications, and deep-dive schemas. All tools are intended for personal or business organizational use. You agree not to distribute modified clones of our software for commercial exploitation under the "Axomia" brand.
+            </p>
+            
+            <h4 style="color: #B48A00; margin-top: 25px; margin-bottom: 10px;">2. Intellectual Property</h4>
+            <p style="font-size: 15px; line-height: 1.7; color: #62626A;">
+                The cultural graphics, geometric SVG logos (including the custom Jaapi design), CSS code systems, and architectural schemas hosted on this platform are the intellectual property of Axomia.in and its respective creators. Traditional assets remain open to regional enrichment under collaborative paradigms.
+            </p>
+            
+            <h4 style="color: #B48A00; margin-top: 25px; margin-bottom: 10px;">3. Disclaimer of Liability</h4>
+            <p style="font-size: 15px; line-height: 1.7; color: #62626A;">
+                Our applications, including CardVault, are provided on an "as is" and "as available" basis. While we prioritize local encryption and secure sandbox containers, we make no warranties regarding unexpected local database corruption, mobile device storage failures, or AI OCR service availability.
+            </p>
+        </div>
+    """)
+
+# =====================================================================
+# 7. GLOBAL FOOTER (RENDERED ON EVERY PAGE)
+# =====================================================================
+render_html("""
+    <div class="site-footer">
+        <a href="?page=privacy" target="_self" class="footer-link">Privacy Policy</a>
+        <span>|</span>
+        <a href="?page=terms" target="_self" class="footer-link">Terms of Use</a>
+    </div>
+""")
