@@ -714,6 +714,36 @@ elif current_page == "terms":
         </div>
     """)
 
+# ---------------------------------------------------------------------
+# PAGE F: USER DATA DELETION
+# ---------------------------------------------------------------------
+elif current_page == "user-data":
+    render_html("""
+        <div style="margin-top: 10px; margin-bottom: 30px;">
+            <p style="color: #B48A00; font-size: 14px; text-transform: uppercase; letter-spacing: 5px; font-weight: 600; margin-bottom: 8px;">Legal & Security</p>
+            <h1 style="font-size: 46px; margin: 0; line-height: 1.25;">User Data Deletion</h1>
+        </div>
+    """)
+    
+    render_html("""
+        <div class="glass-card">
+            <h3 class="accent-title">Data Deletion Information</h3>
+            <p style="font-size: 16px; line-height: 1.7; color: #2D3748;">
+                Instructions for requesting the deletion of your personal data from CardVault and Axomia.in.
+            </p>
+            
+            <h4 style="color: #B48A00; margin-top: 25px; margin-bottom: 10px;">1. On-Device Data</h4>
+            <p style="font-size: 15px; line-height: 1.7; color: #62626A;">
+                CardVault primarily stores data locally on your device. To delete this data, simply uninstall the CardVault application or clear the app's local storage data in your device's settings.
+            </p>
+            
+            <h4 style="color: #B48A00; margin-top: 25px; margin-bottom: 10px;">2. External Data Requests</h4>
+            <p style="font-size: 15px; line-height: 1.7; color: #62626A;">
+                For any data that may have been transmitted to our systems (e.g., via contact forms or inquiries), you have the right to request its complete removal. Please contact us with the subject "User Data Deletion Request" and we will process the deletion promptly.
+            </p>
+        </div>
+    """)
+
 # =====================================================================
 # 7. GLOBAL FOOTER (RENDERED ON EVERY PAGE)
 # =====================================================================
@@ -722,5 +752,7 @@ render_html("""
         <a href="?page=privacy" target="_self" class="footer-link">Privacy Policy</a>
         <span>|</span>
         <a href="?page=terms" target="_self" class="footer-link">Terms of Use</a>
+        <span>|</span>
+        <a href="?page=user-data" target="_blank" class="footer-link">User Data</a>
     </div>
 """)
